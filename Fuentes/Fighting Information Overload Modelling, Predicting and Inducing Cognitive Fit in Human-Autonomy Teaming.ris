@@ -1,0 +1,47 @@
+TY  - CONF
+AU  - Cabanag, M.
+AU  - Stanton, C.J.
+AU  - Cass, J.R.
+TI  - Fighting Information Overload: Modelling, Predicting and Inducing Cognitive Fit in Human-Autonomy Teaming
+PY  - 2024
+T2  - HAI 2024 - Proceedings of the 12th International Conference on Human-Agent Interaction
+SP  - 204
+EP  - 213
+DO  - 10.1145/3687272.3688305
+UR  - https://www.scopus.com/pages/publications/85215512110?origin=resultslist
+AD  - Marcs Institute, Western Sydney University, Australia
+AB  - The principle of Cognitive Fit is an observed phenomenon demonstrating that specific problem solving representations used for specific tasks can be conducive to improved human performance, as compared to other representations. Such a phenomenon is particularly useful in Human-Autonomy Teaming (HAT), where Trust Calibration is dependent on the human team-mate's ability to anticipate errant behaviours of autonomous team-mates. Correct trust calibration can be facilitated and enhanced by using live data visualisations that have a cognitive fit. However, the mechanisms for inducing cognitive fit are not yet well defined nor well understood. This paper presents a novel model that incorporates perceptual efficiency and cognitive externalisation as key mechanisms for enabling cognitive fit. The new model is demonstrated in a series of two experiments using an air-traffic control scenario. This model can explain previous results, be used as a tool to predict the occurrence of cognitive fit, and aid in the development of cognitively efficient displays for decision making contexts, such as HAT.  © 2024 Owner/Author.
+KW  - Cognitive Fit
+KW  - Human-Autonomy Teaming
+KW  - Task Fit Hypothesis
+KW  - Transparency
+KW  - Trust Calibration
+KW  - Trust in Autonomy
+KW  - Data visualization
+KW  - Decision making
+KW  - Human engineering
+KW  - Cognitive fit
+KW  - Human performance
+KW  - Human-autonomy teaming
+KW  - Information overloads
+KW  - Problem-solving
+KW  - Specific problems
+KW  - Specific tasks
+KW  - Task fit hypothesis
+KW  - Trust calibration
+KW  - Trust in autonomy
+KW  - Air traffic control
+PB  - Association for Computing Machinery, Inc
+SN  - 979-840070824-4 (ISBN)
+LA  - English
+J2  - HAI - Proc. Int. Conf. Hum.-Agent Interact.
+M3  - Conference paper
+DB  - Scopus
+N1  - EID: 2-s2.0-85215512110
+N1  - Export Date: 18 October 2026
+N1  - Cited By: 3
+N1  - Conference name: 12th International Conference on Human-Agent Interaction, HAI 2024
+N1  - Conference date: 24 November 2024 through 27 November 2024
+N1  - Conference code: 205340
+ER  -
+

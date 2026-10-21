@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ICT Evolution and Organizational Transformation</title>
+<style>
+:root{
+  --navy:#0f2744; --blue:#1d4ed8; --cyan:#0891b2; --teal:#0d9488; --amber:#d97706;
+  --ink:#1e293b; --muted:#64748b; --line:#dbe3ee; --soft:#f1f5fb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:#e6ecf4;font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);overflow:hidden}
+.stage{position:absolute;left:50%;top:50%;width:1280px;height:720px;transform-origin:center center;background:#fff;box-shadow:0 20px 60px rgba(15,39,68,.18);overflow:hidden}
+.progress{position:absolute;left:0;top:0;height:6px;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .4s;z-index:5}
+.slide{position:absolute;inset:0;padding:52px 72px 70px;opacity:0;visibility:hidden;transition:opacity .45s;display:flex;flex-direction:column}
+.slide.active{opacity:1;visibility:visible}
+.kicker{font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
+h2{font-size:42px;line-height:1.12;color:var(--navy);font-weight:800;letter-spacing:-.01em;max-width:1000px}
+.foot{position:absolute;left:72px;right:72px;bottom:22px;display:flex;justify-content:space-between;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.ic{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.reveal{opacity:0}
+.slide.active .reveal{animation:up .6s ease both;animation-delay:calc(var(--i,0)*90ms + 150ms)}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.chip{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--blue),var(--cyan));flex:none}
+.chip .ic{width:34px;height:34px}
+.chip.teal{background:linear-gradient(135deg,var(--teal),var(--cyan))}
+.chip.amber{background:linear-gradient(135deg,var(--amber),#f59e0b)}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 6px 18px rgba(15,39,68,.06)}
+
+/* Slide 1 */
+.title{background:linear-gradient(135deg,#f8fbff,#e6effb);flex-direction:row;align-items:center;gap:20px;padding-bottom:52px}
+.title .left{flex:1.05}
+.title h1{font-size:56px;line-height:1.08;color:var(--navy);font-weight:800;letter-spacing:-.02em;margin:6px 0 20px}
+.title h1 span{color:var(--blue)}
+.title .sub{font-size:24px;color:var(--muted);max-width:560px;line-height:1.35}
+.title .by{margin-top:44px;font-size:18px;color:var(--ink);font-weight:600}
+.title .by small{display:block;font-weight:400;color:var(--muted);font-size:15px;margin-top:4px}
+.title .right{flex:.95;display:grid;place-items:center}
+.title .right svg{width:520px;height:520px}
+
+/* Slide 2 */
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin:auto 0}
+.three .card{padding:32px 28px;position:relative;min-height:300px;display:flex;flex-direction:column;gap:22px}
+.three .num{position:absolute;right:22px;top:6px;font-size:96px;font-weight:800;color:#e8eef7;line-height:1}
+.three h3{font-size:28px;line-height:1.2;color:var(--navy);margin-top:auto}
+.three .tag{font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan)}
+
+/* Slide 3 */
+.tl{display:grid;grid-template-columns:repeat(5,1fr);position:relative;margin-top:44px}
+.tl::before{content:"";position:absolute;top:84px;left:10%;right:10%;height:5px;border-radius:3px;background:linear-gradient(90deg,#b8c7dd,var(--blue))}
+.tl .it{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+.tl .yr{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:16px;height:30px}
+.tl .node{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;color:#fff;border:5px solid #fff;box-shadow:0 8px 20px rgba(15,39,68,.18);z-index:1}
+.tl .node .ic{width:40px;height:40px}
+.tl h3{margin-top:18px;font-size:23px;color:var(--navy)}
+.tl p{margin-top:6px;font-size:18px;color:var(--muted);max-width:200px}
+.tl .now .node{box-shadow:0 0 0 8px rgba(29,78,216,.16),0 8px 20px rgba(15,39,68,.2)}
+.badge{position:absolute;top:-6px;right:14%;background:var(--amber);color:#fff;font-size:12px;font-weight:800;letter-spacing:.1em;padding:3px 9px;border-radius:99px}
+.banner{margin-top:auto;margin-bottom:6px;background:var(--soft);border-left:6px solid var(--blue);border-radius:12px;padding:16px 24px;font-size:22px;color:var(--navy);font-weight:600}
+
+/* Slide 4 */
+.why{display:grid;grid-template-columns:560px 1fr;gap:36px;margin-top:26px;flex:1;align-items:center}
+.why .chart{padding:16px}
+.stack{display:flex;flex-direction:column;gap:18px}
+.stack .card{display:flex;align-items:center;gap:20px;padding:18px 22px}
+.stack h3{font-size:24px;color:var(--navy)}
+.stack p{font-size:19px;color:var(--muted);margin-top:2px}
+.stack b{color:var(--blue)}
+
+/* Slide 5 */
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:26px;flex:1}
+.col{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.col .hd{display:flex;align-items:center;gap:16px;padding:20px 24px;background:var(--soft);border-bottom:1px solid var(--line)}
+.col .hd h3{font-size:30px;color:var(--navy)}
+.col .rows{padding:6px 24px 10px;display:flex;flex-direction:column;flex:1;justify-content:space-around}
+.row{display:flex;align-items:center;gap:16px;font-size:21px;font-weight:600;padding:12px 0}
+.row + .row{border-top:1px solid var(--line)}
+.mini{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#e8f0fe;color:var(--blue);flex:none}
+.mini .ic{width:26px;height:26px}
+.mini.warn{background:#fef3c7;color:var(--amber)}
+
+/* Slide 6 */
+.impl{display:grid;grid-template-columns:460px 1fr;gap:56px;align-items:center;flex:1;margin-top:6px}
+.impl svg{width:460px;height:460px}
+.big{font-size:34px;line-height:1.25;font-weight:700;color:var(--navy);margin-bottom:30px}
+.big em{font-style:normal;color:var(--blue)}
+.facts{display:flex;flex-direction:column;gap:16px}
+.fact{display:flex;align-items:center;gap:16px;font-size:22px;font-weight:600}
+
+/* Slide 7 */
+.six{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:22px;margin-top:26px;flex:1}
+.six .card{display:flex;flex-direction:column;gap:14px;justify-content:center;position:relative}
+.six .n{position:absolute;right:20px;top:10px;font-size:54px;font-weight:800;color:#e8eef7;line-height:1}
+.six h3{font-size:26px;color:var(--navy)}
+.six p{font-size:19px;color:var(--muted)}
+
+/* Slide 8: 4 Perspectives Grid */
+.four-persp{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:22px;flex:1}
+.four-persp .card{padding:26px 20px;display:flex;flex-direction:column;gap:14px;position:relative}
+.four-persp .tag{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.four-persp h3{font-size:24px;line-height:1.2;color:var(--navy)}
+.four-persp ul{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:16px;color:var(--muted);margin-top:auto}
+.four-persp ul li{display:flex;align-items:flex-start;gap:8px;line-height:1.35}
+.four-persp ul li::before{content:"•";color:var(--blue);font-weight:bold;font-size:18px;line-height:1}
+.four-persp .pill{align-self:flex-start;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:700;background:var(--soft);color:var(--ink);letter-spacing:.04em}
+
+/* Slide 9: Socio-Technical 7S */
+.socio-grid{display:grid;grid-template-columns:520px 1fr;gap:36px;align-items:center;flex:1;margin-top:4px}
+.socio-grid svg{width:520px;height:420px}
+.socio-facts{display:flex;flex-direction:column;gap:12px}
+.socio-card{padding:18px 22px;display:flex;flex-direction:column;gap:6px}
+.socio-card h3{font-size:22px;color:var(--navy);display:flex;align-items:center;gap:12px}
+.socio-card p{font-size:17px;color:var(--muted);line-height:1.35}
+.socio-card b{color:var(--blue)}
+
+/* Slide 10: SAM Matrix */
+.sam-grid{display:grid;grid-template-columns:600px 1fr;gap:32px;align-items:center;flex:1;margin-top:6px}
+.sam-grid svg{width:600px;height:440px}
+.sam-stack{display:flex;flex-direction:column;gap:18px}
+.sam-card{padding:22px 24px;display:flex;align-items:flex-start;gap:18px}
+.sam-card h3{font-size:23px;color:var(--navy)}
+.sam-card p{font-size:18px;color:var(--muted);margin-top:4px;line-height:1.35}
+.sam-card b{color:var(--navy)}
+
+/* Slide 11: AI Governance */
+.gov-stack{display:flex;flex-direction:column;gap:18px;flex:1;margin-top:12px;justify-content:center}
+.gov-compare{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.gov-box{padding:22px 24px;display:flex;flex-direction:column;gap:12px;border-radius:18px}
+.gov-box.trad{background:var(--soft);border:1px solid var(--line)}
+.gov-box.ai{background:#fff;border:2px solid var(--blue);box-shadow:0 8px 24px rgba(29,78,216,.1)}
+.gov-box .head{display:flex;align-items:center;gap:14px}
+.gov-box h3{font-size:23px;color:var(--navy)}
+.gov-box ul{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:17px;color:var(--ink);font-weight:600}
+.gov-box ul li{display:flex;align-items:center;gap:10px}
+.gov-box ul li .mini{width:30px;height:30px;border-radius:8px}
+.gov-box ul li .mini .ic{width:18px;height:18px}
+.gov-tri{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.gov-card{padding:16px 18px;display:flex;align-items:center;gap:14px}
+.gov-card h4{font-size:19px;color:var(--navy);font-weight:700}
+.gov-card p{font-size:15px;color:var(--muted);margin-top:2px}
+
+/* Slide 12: CDR & Green IT */
+.cdr-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:12px;flex:1}
+.cdr-col{padding:26px 28px;display:flex;flex-direction:column;gap:14px;position:relative}
+.cdr-head{display:flex;align-items:center;gap:14px}
+.cdr-head h3{font-size:26px;color:var(--navy)}
+.cdr-stat-row{display:flex;align-items:center;gap:16px;margin:2px 0}
+.cdr-stat{font-size:50px;font-weight:900;color:var(--blue);line-height:1;letter-spacing:-.02em;white-space:nowrap}
+.cdr-stat.teal{color:var(--teal)}
+.cdr-stat-label{font-size:17px;font-weight:600;color:var(--ink);max-width:340px;line-height:1.25}
+.cdr-points{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.cdr-point{display:flex;align-items:flex-start;gap:12px;font-size:17px;color:var(--muted);line-height:1.35}
+.cdr-point b{color:var(--ink)}
+.cdr-point .mini{width:34px;height:34px;border-radius:10px;margin-top:2px}
+.cdr-point .mini .ic{width:18px;height:18px}
+.cdr-banner{background:var(--soft);border-left:6px solid var(--teal);border-radius:12px;padding:12px 20px;font-size:18px;color:var(--navy);font-weight:600;margin-top:12px}
+
+/* Slide 13 (End) */
+.end{background:linear-gradient(135deg,#f8fbff,#e6effb)}
+.endgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;flex:1}
+.endgrid .quote{font-size:44px;line-height:1.18;font-weight:800;color:var(--navy);letter-spacing:-.01em}
+.endgrid .quote span{color:var(--blue)}
+.endgrid .facts .fact{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 20px;box-shadow:0 6px 18px rgba(15,39,68,.06);font-size:24px}
+.thanks{display:inline-block;margin-top:34px;background:linear-gradient(90deg,var(--blue),var(--cyan));color:#fff;font-weight:700;font-size:22px;padding:12px 26px;border-radius:99px}
+
+/* UI */
+.ui{position:fixed;bottom:12px;right:14px;display:flex;gap:8px;align-items:center;z-index:10;opacity:.55;transition:opacity .2s}
+.ui:hover{opacity:1}
+.ui button{width:38px;height:38px;border-radius:50%;border:1px solid #c5d2e4;background:#fff;color:var(--navy);font-size:18px;cursor:pointer}
+.ui button:hover{background:var(--soft)}
+.ui span{font-size:13px;color:var(--muted);min-width:44px;text-align:center}
+
+@media print{
+  @page{size:1280px 720px;margin:0}
+  html,body{height:auto;overflow:visible;background:#fff}
+  .stage{position:static;transform:none!important;box-shadow:none;height:auto}
+  .slide{position:relative;opacity:1;visibility:visible;width:1280px;height:720px;break-after:page;page-break-after:always}
+  .reveal{opacity:1!important;animation:none!important}
+  .ui,.progress{display:none}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M2 20h20"/></symbol>
+  <symbol id="i-flow" viewBox="0 0 24 24"><rect x="3" y="3" width="6" height="6" rx="1"/><rect x="15" y="15" width="6" height="6" rx="1"/><path d="M9 6h3a3 3 0 0 1 3 3v6"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M4 7h16"/><path d="M4 7l-2.5 7a3.5 3.5 0 0 0 5 0L4 7zM20 7l-2.5 7a3.5 3.5 0 0 0 5 0L20 7z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 10 5-10 5L2 7l10-5z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></symbol>
+  <symbol id="i-brief" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 1 9.2A7 7 0 0 1 11 20z"/><path d="m2 21 9-9"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></symbol>
+</defs>
+</svg>
+
+<div class="stage" id="stage">
+<div class="progress" id="bar"></div>
+
+<!-- 1. TITLE -->
+<section class="slide title active">
+  <div class="left">
+    <div class="kicker reveal" style="--i:0">Software Implementation</div>
+    <h1 class="reveal" style="--i:1">Evolution of <span>ICT</span> and Organizational Transformation</h1>
+    <p class="sub reveal" style="--i:2">From centralized machines to intelligent, connected systems</p>
+    <div class="by reveal" style="--i:3">Carlos Daniel Puentestar Chamorro</div>
+    <div class="by reveal" style="--i:3">Mateo Sebastián Rocha Pupiales
+    </div>
+  </div>
+  <div class="right reveal" style="--i:2">
+    <svg viewBox="0 0 560 560" aria-hidden="true">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d4ed8"/><stop offset="1" stop-color="#0891b2"/></linearGradient>
+      </defs>
+      <circle cx="280" cy="280" r="200" fill="none" stroke="#c7d6ea" stroke-width="2" stroke-dasharray="6 8"/>
+      <circle cx="280" cy="280" r="130" fill="#fff" fill-opacity=".6" stroke="#d5e1f1" stroke-width="2"/>
+      <g stroke="#c7d6ea" stroke-width="3">
+        <line x1="280" y1="280" x2="280" y2="80"/><line x1="280" y1="280" x2="453" y2="180"/>
+        <line x1="280" y1="280" x2="453" y2="380"/><line x1="280" y1="280" x2="280" y2="480"/>
+        <line x1="280" y1="280" x2="107" y2="380"/><line x1="280" y1="280" x2="107" y2="180"/>
+      </g>
+      <g fill="#fff" stroke="#1d4ed8" stroke-width="3">
+        <circle cx="280" cy="80" r="46"/><circle cx="453" cy="180" r="46"/><circle cx="453" cy="380" r="46"/>
+        <circle cx="280" cy="480" r="46"/><circle cx="107" cy="380" r="46"/><circle cx="107" cy="180" r="46"/>
+      </g>
+      <svg class="ic" x="260" y="60" width="40" height="40" viewBox="0 0 24 24" style="color:#1d4ed8"><use href="#i-cloud"/></svg>
+      <svg class="ic" x="433" y="160" width="40" height="40" viewBox="0 0 24 24" style="color:#0891b2"><use href="#i-phone"/></svg>
+      <svg class="ic" x="433" y="360" width="40" height="40" viewBox="0 0 24 24" style="color:#1d4ed8"><use href="#i-db"/></svg>
+      <svg class="ic" x="260" y="460" width="40" height="40" viewBox="0 0 24 24" style="color:#0891b2"><use href="#i-users"/></svg>
+      <svg class="ic" x="87" y="360" width="40" height="40" viewBox="0 0 24 24" style="color:#1d4ed8"><use href="#i-server"/></svg>
+      <svg class="ic" x="87" y="160" width="40" height="40" viewBox="0 0 24 24" style="color:#0891b2"><use href="#i-globe"/></svg>
+      <circle cx="280" cy="280" r="70" fill="url(#g1)"/>
+      <svg class="ic" x="244" y="244" width="72" height="72" viewBox="0 0 24 24" style="color:#fff"><use href="#i-cpu"/></svg>
+    </svg>
+  </div>
+</section>
+
+<!-- 2. THREE QUESTIONS -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">Agenda</div>
+  <h2 class="reveal" style="--i:1">Three questions guide this talk</h2>
+  <div class="three">
+    <div class="card reveal" style="--i:2">
+      <span class="num">1</span>
+      <div class="chip"><svg class="ic"><use href="#i-bolt"/></svg></div>
+      <span class="tag">Change &amp; background</span>
+      <h3>What is changing, and why?</h3>
+    </div>
+    <div class="card reveal" style="--i:3">
+      <span class="num">2</span>
+      <div class="chip teal"><svg class="ic"><use href="#i-users"/></svg></div>
+      <span class="tag">Impact</span>
+      <h3>How does it reshape work, organizations and society?</h3>
+    </div>
+    <div class="card reveal" style="--i:4">
+      <span class="num">3</span>
+      <div class="chip amber"><svg class="ic"><use href="#i-target"/></svg></div>
+      <span class="tag">Decisions</span>
+      <h3>What should an IT manager decide?</h3>
+    </div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>2 / 13</span></div>
+</section>
+
+<!-- 3. TIMELINE -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">1 · The technological change</div>
+  <h2 class="reveal" style="--i:1">From centralized machines to intelligent systems</h2>
+  <div class="tl reveal" style="--i:2">
+    <div class="it"><div class="yr">1960s–70s</div><div class="node" style="background:#9db0cc"><svg class="ic"><use href="#i-server"/></svg></div><h3>Mainframes</h3><p>Centralized processing</p></div>
+    <div class="it"><div class="yr">1980s</div><div class="node" style="background:#7894bd"><svg class="ic"><use href="#i-monitor"/></svg></div><h3>Personal computers</h3><p>Computing on every desk</p></div>
+    <div class="it"><div class="yr">1990s</div><div class="node" style="background:#4f78c0"><svg class="ic"><use href="#i-globe"/></svg></div><h3>Internet &amp; Web</h3><p>Global connectivity</p></div>
+    <div class="it"><div class="yr">2000s–10s</div><div class="node" style="background:#2a5fd0"><svg class="ic"><use href="#i-cloud"/></svg></div><h3>Mobile &amp; Cloud</h3><p>Anywhere, on demand</p></div>
+    <div class="it now"><span class="badge">NOW</span><div class="yr">2020s</div><div class="node" style="background:#1d4ed8"><svg class="ic"><use href="#i-cpu"/></svg></div><h3>AI &amp; Data</h3><p>Intelligent automation</p></div>
+  </div>
+  <div class="banner reveal" style="--i:4">Each wave lowered the cost of access and raised the speed of change.</div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>3 / 13</span></div>
+</section>
+
+<!-- 4. WHY NOW -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">1 · Background</div>
+  <h2 class="reveal" style="--i:1">Why now? Three accelerators</h2>
+  <div class="why">
+    <div class="card chart reveal" style="--i:2">
+      <svg viewBox="0 0 560 340" width="100%" aria-label="Illustrative growth curves">
+        <g stroke="#e5ecf5" stroke-width="1">
+          <line x1="50" y1="60" x2="540" y2="60"/><line x1="50" y1="120" x2="540" y2="120"/>
+          <line x1="50" y1="180" x2="540" y2="180"/><line x1="50" y1="240" x2="540" y2="240"/>
+        </g>
+        <path d="M50 20V300H540" fill="none" stroke="#94a3b8" stroke-width="2"/>
+        <path d="M50 292 C220 286 360 220 540 72" fill="none" stroke="#1d4ed8" stroke-width="5" stroke-linecap="round"/>
+        <path d="M50 296 C150 292 230 250 300 190 S420 122 540 110" fill="none" stroke="#0891b2" stroke-width="5" stroke-linecap="round"/>
+        <path d="M50 298 C250 296 400 250 540 22" fill="none" stroke="#d97706" stroke-width="5" stroke-linecap="round"/>
+        <g font-size="15" fill="#334155" font-weight="600">
+          <circle cx="72" cy="40" r="7" fill="#1d4ed8"/><text x="88" y="45">Computing power</text>
+          <circle cx="72" cy="68" r="7" fill="#0891b2"/><text x="88" y="73">Connectivity</text>
+          <circle cx="72" cy="96" r="7" fill="#d97706"/><text x="88" y="101">Data generated</text>
+        </g>
+        <g font-size="13" fill="#64748b">
+          <text x="50" y="324">1980</text><text x="270" y="324" text-anchor="middle">2000</text><text x="540" y="324" text-anchor="end">Today</text>
+          <text x="548" y="338" text-anchor="end" font-style="italic">Illustrative trends</text>
+        </g>
+      </svg>
+    </div>
+    <div class="stack">
+      <div class="card reveal" style="--i:3"><div class="chip"><svg class="ic"><use href="#i-cpu"/></svg></div><div><h3>Cheaper, faster hardware</h3><p>Moore's Law: <b>~2×</b> every 2 years</p></div></div>
+      <div class="card reveal" style="--i:4"><div class="chip teal"><svg class="ic"><use href="#i-globe"/></svg></div><div><h3>Ubiquitous connectivity</h3><p><b>5.5B+</b> people online (ITU)</p></div></div>
+      <div class="card reveal" style="--i:5"><div class="chip amber"><svg class="ic"><use href="#i-cloud"/></svg></div><div><h3>Data + cloud economics</h3><p>Pay-as-you-go, APIs, open source</p></div></div>
+    </div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>4 / 13</span></div>
+</section>
+
+<!-- 5. IMPACT -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">2 · Impact</div>
+  <h2 class="reveal" style="--i:1">Work, organizations and society are being reshaped</h2>
+  <div class="cols">
+    <div class="card col reveal" style="--i:2">
+      <div class="hd"><div class="chip"><svg class="ic"><use href="#i-brief"/></svg></div><h3>Work</h3></div>
+      <div class="rows">
+        <div class="row"><div class="mini"><svg class="ic"><use href="#i-laptop"/></svg></div>Remote &amp; hybrid</div>
+        <div class="row"><div class="mini"><svg class="ic"><use href="#i-flow"/></svg></div>Task automation</div>
+        <div class="row"><div class="mini"><svg class="ic"><use href="#i-refresh"/></svg></div>Continuous upskilling</div>
+      </div>
+    </div>
+    <div class="card col reveal" style="--i:3">
+      <div class="hd"><div class="chip teal"><svg class="ic"><use href="#i-building"/></svg></div><h3>Organizations</h3></div>
+      <div class="rows">
+        <div class="row"><div class="mini"><svg class="ic"><use href="#i-chart"/></svg></div>Data-driven decisions</div>
+        <div class="row"><div class="mini"><svg class="ic"><use href="#i-layers"/></svg></div>Agile, platform models</div>
+        <div class="row"><div class="mini"><svg class="ic"><use href="#i-phone"/></svg></div>Digital products</div>
+      </div>
+    </div>
+    <div class="card col reveal" style="--i:4">
+      <div class="hd"><div class="chip amber"><svg class="ic"><use href="#i-globe"/></svg></div><h3>Society</h3></div>
+      <div class="rows">
+        <div class="row"><div class="mini"><svg class="ic"><use href="#i-globe"/></svg></div>Wider access to services</div>
+        <div class="row"><div class="mini warn"><svg class="ic"><use href="#i-lock"/></svg></div>Privacy &amp; security risks</div>
+        <div class="row"><div class="mini warn"><svg class="ic"><use href="#i-users"/></svg></div>Digital divide</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>5 / 13</span></div>
+</section>
+
+<!-- 6. IMPLEMENTATION LENS -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">2 · The implementation lens</div>
+  <h2 class="reveal" style="--i:1">Implementation turns technology into value</h2>
+  <div class="impl">
+    <svg class="reveal" style="--i:2" viewBox="0 0 500 500" aria-hidden="true">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#1d4ed8"/></marker>
+        <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d4ed8"/><stop offset="1" stop-color="#0891b2"/></linearGradient>
+      </defs>
+      <g fill="none" stroke="#1d4ed8" stroke-width="4" marker-end="url(#ar)">
+        <path d="M294 86 A170 170 0 0 1 414 206"/>
+        <path d="M414 294 A170 170 0 0 1 294 414"/>
+        <path d="M206 414 A170 170 0 0 1 86 294"/>
+        <path d="M86 206 A170 170 0 0 1 206 86"/>
+      </g>
+      <circle cx="250" cy="250" r="64" fill="url(#g2)"/>
+      <text x="250" y="258" text-anchor="middle" font-size="24" font-weight="800" fill="#fff" font-family="Segoe UI,Arial,sans-serif">VALUE</text>
+      <g fill="#fff" stroke="#0f2744" stroke-width="3">
+        <circle cx="250" cy="80" r="54"/><circle cx="420" cy="250" r="54"/><circle cx="250" cy="420" r="54"/><circle cx="80" cy="250" r="54"/>
+      </g>
+      <g font-size="18" font-weight="700" fill="#0f2744" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif">
+        <text x="250" y="110">Plan</text><text x="420" y="280">Deploy</text><text x="250" y="450">Adopt</text><text x="80" y="280">Improve</text>
+      </g>
+      <svg class="ic" x="234" y="48" width="32" height="32" viewBox="0 0 24 24" style="color:#1d4ed8"><use href="#i-target"/></svg>
+      <svg class="ic" x="404" y="218" width="32" height="32" viewBox="0 0 24 24" style="color:#0891b2"><use href="#i-upload"/></svg>
+      <svg class="ic" x="234" y="388" width="32" height="32" viewBox="0 0 24 24" style="color:#1d4ed8"><use href="#i-users"/></svg>
+      <svg class="ic" x="64" y="218" width="32" height="32" viewBox="0 0 24 24" style="color:#0891b2"><use href="#i-chart"/></svg>
+    </svg>
+    <div>
+      <p class="big reveal" style="--i:3">Technology creates value only when it is <em>implemented</em>, <em>adopted</em> and <em>sustained</em>.</p>
+      <div class="facts">
+        <div class="fact reveal" style="--i:4"><div class="mini"><svg class="ic"><use href="#i-users"/></svg></div>Failure is often about people and process</div>
+        <div class="fact reveal" style="--i:5"><div class="mini"><svg class="ic"><use href="#i-refresh"/></svg></div>Change never stops, so neither does delivery</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>6 / 13</span></div>
+</section>
+
+<!-- 7. DECISIONS -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">3 · Decisions</div>
+  <h2 class="reveal" style="--i:1">Six decisions for the IT manager</h2>
+  <div class="six">
+    <div class="card reveal" style="--i:2"><span class="n">1</span><div class="chip"><svg class="ic"><use href="#i-target"/></svg></div><h3>Align with strategy</h3><p>IT portfolio tied to business goals</p></div>
+    <div class="card reveal" style="--i:3"><span class="n">2</span><div class="chip teal"><svg class="ic"><use href="#i-cloud"/></svg></div><h3>Modernize architecture</h3><p>Cloud-first, integrated, scalable</p></div>
+    <div class="card reveal" style="--i:4"><span class="n">3</span><div class="chip amber"><svg class="ic"><use href="#i-shield"/></svg></div><h3>Secure &amp; govern data</h3><p>Security, privacy, compliance</p></div>
+    <div class="card reveal" style="--i:5"><span class="n">4</span><div class="chip"><svg class="ic"><use href="#i-users"/></svg></div><h3>Lead the change</h3><p>Train people, drive adoption</p></div>
+    <div class="card reveal" style="--i:6"><span class="n">5</span><div class="chip teal"><svg class="ic"><use href="#i-scale"/></svg></div><h3>Adopt AI responsibly</h3><p>Ethics, transparency, oversight</p></div>
+    <div class="card reveal" style="--i:7"><span class="n">6</span><div class="chip amber"><svg class="ic"><use href="#i-chart"/></svg></div><h3>Measure value</h3><p>KPIs, ROI, continuous improvement</p></div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>7 / 13</span></div>
+</section>
+
+<!-- 8. RESEARCH PERSPECTIVES OVERVIEW -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">4 · Research Perspectives</div>
+  <h2 class="reveal" style="--i:1">Four multidimensional lenses on transformation</h2>
+  <div class="four-persp">
+    <div class="card reveal" style="--i:2">
+      <span class="tag" style="color:var(--blue)">Transversal</span>
+      <div class="chip"><svg class="ic"><use href="#i-layers"/></svg></div>
+      <h3>Socio-Technical System</h3>
+      <ul>
+        <li>McKinsey 7S: Tech co-determines strategy &amp; staff</li>
+        <li>Failure occurs when culture &amp; skills are ignored</li>
+        <li>Nolan's organizational maturity curves</li>
+      </ul>
+      <span class="pill">Holistic Alignment</span>
+    </div>
+    <div class="card reveal" style="--i:3">
+      <span class="tag" style="color:var(--cyan)">Strategic</span>
+      <div class="chip teal"><svg class="ic"><use href="#i-target"/></svg></div>
+      <h3>Strategic Alignment (SAM)</h3>
+      <ul>
+        <li>Henderson &amp; Venkatraman 4-domain model</li>
+        <li>IT shifts from back-office to business model driver</li>
+        <li>Resource-based view: Dynamic digital capabilities</li>
+      </ul>
+      <span class="pill">Value Creation</span>
+    </div>
+    <div class="card reveal" style="--i:4">
+      <span class="tag" style="color:var(--amber)">Governance &amp; Risk</span>
+      <div class="chip amber"><svg class="ic"><use href="#i-shield"/></svg></div>
+      <h3>AI Systems (ISO 42001)</h3>
+      <ul>
+        <li>Beyond COBIT &amp; ITIL to algorithmic governance</li>
+        <li>Mitigating unauthorized "Shadow AI" adoption</li>
+        <li>Auditable trust &amp; EU AI Act readiness</li>
+      </ul>
+      <span class="pill">Compliance &amp; Trust</span>
+    </div>
+    <div class="card reveal" style="--i:5">
+      <span class="tag" style="color:var(--teal)">Human &amp; Social</span>
+      <div class="chip teal"><svg class="ic"><use href="#i-leaf"/></svg></div>
+      <h3>CDR &amp; Green IT</h3>
+      <ul>
+        <li>Corporate Digital Responsibility (7 Principles)</li>
+        <li>Workplace cognitive fatigue &amp; context switching</li>
+        <li>Datacenter compute &amp; Scope 3 carbon footprint</li>
+      </ul>
+      <span class="pill">Planetary Ethics</span>
+    </div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>8 / 13</span></div>
+</section>
+
+<!-- 9. TRANSVERSAL PERSPECTIVE: 7S -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">4.1 · Transversal Perspective</div>
+  <h2 class="reveal" style="--i:1">Technology succeeds only within a <span style="white-space:nowrap">socio-technical</span> system</h2>
+  <div class="socio-grid">
+    <svg class="reveal" style="--i:2" viewBox="0 0 540 450" aria-label="McKinsey 7S Framework">
+      <defs>
+        <radialGradient id="g-center" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#2563eb"/>
+          <stop offset="100%" stop-color="#0f2744"/>
+        </radialGradient>
+        <filter id="glow-amber" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#d97706" flood-opacity="0.35"/>
+        </filter>
+      </defs>
+
+      <!-- Connective Outer Hexagon -->
+      <polygon points="270,75 400,150 400,300 270,375 140,300 140,150" fill="none" stroke="#cbd5e1" stroke-width="2.5" stroke-dasharray="6 6"/>
+
+      <!-- Radial Spokes -->
+      <line x1="270" y1="225" x2="270" y2="75" stroke="#94a3b8" stroke-width="2.5"/>
+      <line x1="270" y1="225" x2="400" y2="150" stroke="#94a3b8" stroke-width="2.5"/>
+      <line x1="270" y1="225" x2="400" y2="300" stroke="#94a3b8" stroke-width="2.5"/>
+      <line x1="270" y1="225" x2="270" y2="375" stroke="#94a3b8" stroke-width="2.5"/>
+      <line x1="270" y1="225" x2="140" y2="300" stroke="#94a3b8" stroke-width="2.5"/>
+      <line x1="270" y1="225" x2="140" y2="150" stroke="#d97706" stroke-width="3.5"/>
+
+      <!-- Center Node: Shared Values -->
+      <circle cx="270" cy="225" r="62" fill="url(#g-center)" stroke="#fff" stroke-width="4" filter="drop-shadow(0 8px 16px rgba(15,39,68,.25))"/>
+      <text x="270" y="220" text-anchor="middle" font-size="18" font-weight="800" fill="#fff" font-family="Segoe UI,Arial,sans-serif">SHARED</text>
+      <text x="270" y="240" text-anchor="middle" font-size="18" font-weight="800" fill="#fff" font-family="Segoe UI,Arial,sans-serif">VALUES</text>
+
+      <!-- 1. Strategy -->
+      <circle cx="270" cy="75" r="44" fill="#fff" stroke="#1d4ed8" stroke-width="3" filter="drop-shadow(0 4px 10px rgba(15,39,68,.1))"/>
+      <svg class="ic" x="254" y="52" width="32" height="32" viewBox="0 0 24 24" style="color:#1d4ed8"><use href="#i-target"/></svg>
+      <text x="270" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#0f2744" font-family="Segoe UI,Arial,sans-serif">Strategy</text>
+
+      <!-- 2. Structure -->
+      <circle cx="400" cy="150" r="44" fill="#fff" stroke="#0891b2" stroke-width="3" filter="drop-shadow(0 4px 10px rgba(15,39,68,.1))"/>
+      <svg class="ic" x="384" y="127" width="32" height="32" viewBox="0 0 24 24" style="color:#0891b2"><use href="#i-layers"/></svg>
+      <text x="400" y="173" text-anchor="middle" font-size="14" font-weight="700" fill="#0f2744" font-family="Segoe UI,Arial,sans-serif">Structure</text>
+
+      <!-- 3. Staff -->
+      <circle cx="400" cy="300" r="44" fill="#fff" stroke="#0d9488" stroke-width="3" filter="drop-shadow(0 4px 10px rgba(15,39,68,.1))"/>
+      <svg class="ic" x="384" y="277" width="32" height="32" viewBox="0 0 24 24" style="color:#0d9488"><use href="#i-users"/></svg>
+      <text x="400" y="323" text-anchor="middle" font-size="14" font-weight="700" fill="#0f2744" font-family="Segoe UI,Arial,sans-serif">Staff</text>
+
+      <!-- 4. Style -->
+      <circle cx="270" cy="375" r="44" fill="#fff" stroke="#1d4ed8" stroke-width="3" filter="drop-shadow(0 4px 10px rgba(15,39,68,.1))"/>
+      <svg class="ic" x="254" y="352" width="32" height="32" viewBox="0 0 24 24" style="color:#1d4ed8"><use href="#i-brief"/></svg>
+      <text x="270" y="398" text-anchor="middle" font-size="14" font-weight="700" fill="#0f2744" font-family="Segoe UI,Arial,sans-serif">Style</text>
+
+      <!-- 5. Skills -->
+      <circle cx="140" cy="300" r="44" fill="#fff" stroke="#0891b2" stroke-width="3" filter="drop-shadow(0 4px 10px rgba(15,39,68,.1))"/>
+      <svg class="ic" x="124" y="277" width="32" height="32" viewBox="0 0 24 24" style="color:#0891b2"><use href="#i-bolt"/></svg>
+      <text x="140" y="323" text-anchor="middle" font-size="14" font-weight="700" fill="#0f2744" font-family="Segoe UI,Arial,sans-serif">Skills</text>
+
+      <!-- 6. Systems (ICT Catalyst) -->
+      <circle cx="140" cy="150" r="48" fill="#fffbeb" stroke="#d97706" stroke-width="4" filter="url(#glow-amber)"/>
+      <svg class="ic" x="124" y="125" width="32" height="32" viewBox="0 0 24 24" style="color:#d97706"><use href="#i-cpu"/></svg>
+      <text x="140" y="172" text-anchor="middle" font-size="14" font-weight="800" fill="#d97706" font-family="Segoe UI,Arial,sans-serif">Systems</text>
+      <g transform="translate(140, 94)">
+        <rect x="-42" y="-11" width="84" height="22" rx="11" fill="#d97706"/>
+        <text x="0" y="4" text-anchor="middle" font-size="10" font-weight="800" fill="#fff" letter-spacing="0.08em" font-family="Segoe UI,Arial,sans-serif">CATALYST</text>
+      </g>
+    </svg>
+
+    <div class="socio-facts">
+      <div class="card socio-card reveal" style="--i:3">
+        <h3><div class="mini"><svg class="ic"><use href="#i-layers"/></svg></div>Co-Determination Principle</h3>
+        <p>Technology and organizational culture continuously shape each other. Modifying <b>Systems (ICT)</b> directly destabilizes Structure, Skills, and Leadership Style.</p>
+      </div>
+      <div class="card socio-card reveal" style="--i:4">
+        <h3><div class="mini"><svg class="ic"><use href="#i-target"/></svg></div>Resource &amp; Knowledge-Based View</h3>
+        <p>Software and hardware are commoditized. Sustainable competitive advantage lies in <b>dynamic capabilities</b>: integrating knowledge and adapting workflows.</p>
+      </div>
+      <div class="card socio-card reveal" style="--i:5">
+        <h3><div class="mini"><svg class="ic"><use href="#i-refresh"/></svg></div>Nolan's Maturity Curves</h3>
+        <p>Maturity progresses from operational back-office automation to open data integration and organizational learning.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>9 / 13</span></div>
+</section>
+
+<!-- 10. STRATEGIC PERSPECTIVE: SAM -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">4.2 · Strategic Perspective</div>
+  <h2 class="reveal" style="--i:1">Strategic Alignment Model (Henderson &amp; Venkatraman)</h2>
+  <div class="sam-grid">
+    <svg class="reveal" style="--i:2" viewBox="0 0 620 440" aria-label="Strategic Alignment Model">
+      <defs>
+        <marker id="ar-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L8 5L0 9z" fill="#1d4ed8"/></marker>
+        <marker id="ar-blue-rev" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M8 1L0 5L8 9z" fill="#1d4ed8"/></marker>
+        <marker id="ar-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 1L8 5L0 9z" fill="#0891b2"/></marker>
+        <marker id="ar-cyan-rev" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M8 1L0 5L8 9z" fill="#0891b2"/></marker>
+      </defs>
+
+      <!-- Column Headers -->
+      <g font-family="Segoe UI,Arial,sans-serif" font-weight="800" font-size="14" letter-spacing="0.1em" text-anchor="middle">
+        <text x="170" y="30" fill="#0f2744">BUSINESS DOMAIN</text>
+        <text x="450" y="30" fill="#1d4ed8">IT DOMAIN</text>
+      </g>
+
+      <!-- Left Row Headers -->
+      <g font-family="Segoe UI,Arial,sans-serif" font-weight="800" font-size="11" letter-spacing="0.08em" fill="#64748b" transform="translate(18, 135) rotate(-90)">
+        <text text-anchor="middle">STRATEGY (EXTERNAL)</text>
+      </g>
+      <g font-family="Segoe UI,Arial,sans-serif" font-weight="800" font-size="11" letter-spacing="0.08em" fill="#64748b" transform="translate(18, 325) rotate(-90)">
+        <text text-anchor="middle">OPERATIONS (INTERNAL)</text>
+      </g>
+
+      <!-- Quadrant 1: Business Strategy -->
+      <g transform="translate(45, 46)">
+        <rect width="250" height="155" rx="14" fill="#fff" stroke="#93c5fd" stroke-width="2" filter="drop-shadow(0 6px 14px rgba(15,39,68,.05))"/>
+        <rect width="250" height="38" rx="14" fill="#eff6ff"/>
+        <rect y="24" width="250" height="14" fill="#eff6ff"/>
+        <svg class="ic" x="14" y="8" width="22" height="22" viewBox="0 0 24 24" style="color:#1d4ed8"><use href="#i-brief"/></svg>
+        <text x="44" y="25" font-size="15" font-weight="800" fill="#0f2744" font-family="Segoe UI,Arial,sans-serif">Business Strategy</text>
+        <g font-size="13" fill="#475569" font-family="Segoe UI,Arial,sans-serif" font-weight="600">
+          <text x="18" y="66">• Market Scope &amp; Offerings</text>
+          <text x="18" y="94">• Distinctive Competencies</text>
+          <text x="18" y="122">• Business Governance</text>
+        </g>
+      </g>
+
+      <!-- Quadrant 2: IT Strategy -->
+      <g transform="translate(325, 46)">
+        <rect width="250" height="155" rx="14" fill="#fff" stroke="#38bdf8" stroke-width="2" filter="drop-shadow(0 6px 14px rgba(15,39,68,.05))"/>
+        <rect width="250" height="38" rx="14" fill="#f0f9ff"/>
+        <rect y="24" width="250" height="14" fill="#f0f9ff"/>
+        <svg class="ic" x="14" y="8" width="22" height="22" viewBox="0 0 24 24" style="color:#0284c7"><use href="#i-cpu"/></svg>
+        <text x="44" y="25" font-size="15" font-weight="800" fill="#0f2744" font-family="Segoe UI,Arial,sans-serif">IT Strategy</text>
+        <g font-size="13" fill="#475569" font-family="Segoe UI,Arial,sans-serif" font-weight="600">
+          <text x="18" y="66">• Technology Scope (Cloud/AI)</text>
+          <text x="18" y="94">• Systemic Competencies</text>
+          <text x="18" y="122">• IT Governance &amp; Standards</text>
+        </g>
+      </g>
+
+      <!-- Quadrant 3: Organizational Infrastructure -->
+      <g transform="translate(45, 235)">
+        <rect width="250" height="155" rx="14" fill="#fff" stroke="#cbd5e1" stroke-width="2" filter="drop-shadow(0 6px 14px rgba(15,39,68,.05))"/>
+        <rect width="250" height="38" rx="14" fill="#f8fafc"/>
+        <rect y="24" width="250" height="14" fill="#f8fafc"/>
+        <svg class="ic" x="14" y="8" width="22" height="22" viewBox="0 0 24 24" style="color:#475569"><use href="#i-building"/></svg>
+        <text x="44" y="25" font-size="15" font-weight="800" fill="#0f2744" font-family="Segoe UI,Arial,sans-serif">Org Infrastructure</text>
+        <g font-size="13" fill="#475569" font-family="Segoe UI,Arial,sans-serif" font-weight="600">
+          <text x="18" y="66">• Administrative Structure</text>
+          <text x="18" y="94">• Business Workflows</text>
+          <text x="18" y="122">• Employee Capabilities</text>
+        </g>
+      </g>
+
+      <!-- Quadrant 4: IT Infrastructure -->
+      <g transform="translate(325, 235)">
+        <rect width="250" height="155" rx="14" fill="#fff" stroke="#5eead4" stroke-width="2" filter="drop-shadow(0 6px 14px rgba(15,39,68,.05))"/>
+        <rect width="250" height="38" rx="14" fill="#f0fdfa"/>
+        <rect y="24" width="250" height="14" fill="#f0fdfa"/>
+        <svg class="ic" x="14" y="8" width="22" height="22" viewBox="0 0 24 24" style="color:#0d9488"><use href="#i-server"/></svg>
+        <text x="44" y="25" font-size="15" font-weight="800" fill="#0f2744" font-family="Segoe UI,Arial,sans-serif">IT Infrastructure</text>
+        <g font-size="13" fill="#475569" font-family="Segoe UI,Arial,sans-serif" font-weight="600">
+          <text x="18" y="66">• Applications &amp; Cloud</text>
+          <text x="18" y="94">• Integration Pipelines</text>
+          <text x="18" y="122">• Technical Skills</text>
+        </g>
+      </g>
+
+      <!-- Connectors -->
+      <line x1="298" y1="123" x2="322" y2="123" stroke="#1d4ed8" stroke-width="3" marker-start="url(#ar-blue-rev)" marker-end="url(#ar-blue)"/>
+      <line x1="298" y1="312" x2="322" y2="312" stroke="#0891b2" stroke-width="3" marker-start="url(#ar-cyan-rev)" marker-end="url(#ar-cyan)"/>
+      <line x1="170" y1="204" x2="170" y2="232" stroke="#1d4ed8" stroke-width="3" marker-start="url(#ar-blue-rev)" marker-end="url(#ar-blue)"/>
+      <line x1="450" y1="204" x2="450" y2="232" stroke="#0891b2" stroke-width="3" marker-start="url(#ar-cyan-rev)" marker-end="url(#ar-cyan)"/>
+
+      <!-- Center Dynamic Hub -->
+      <circle cx="310" cy="218" r="26" fill="#fff" stroke="#1d4ed8" stroke-width="3" filter="drop-shadow(0 4px 8px rgba(15,39,68,.15))"/>
+      <svg class="ic" x="297" y="205" width="26" height="26" viewBox="0 0 24 24" style="color:#1d4ed8"><use href="#i-refresh"/></svg>
+    </svg>
+
+    <div class="sam-stack">
+      <div class="card sam-card reveal" style="--i:3">
+        <div class="chip"><svg class="ic"><use href="#i-target"/></svg></div>
+        <div>
+          <h3>IT as a Strategic Enabler</h3>
+          <p>IT moves beyond back-office cost reduction. High performers use digital capabilities to reshape business scope and enter new markets.</p>
+        </div>
+      </div>
+      <div class="card sam-card reveal" style="--i:4">
+        <div class="chip teal"><svg class="ic"><use href="#i-flow"/></svg></div>
+        <div>
+          <h3>Dynamic Realignment</h3>
+          <p>Alignment is a continuous recalibration across internal processes and volatile competitive conditions, not a static state.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>10 / 13</span></div>
+</section>
+
+<!-- 11. GOVERNANCE & RISK: ISO 42001 -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">4.3 · Governance &amp; Risk Perspective</div>
+  <h2 class="reveal" style="--i:1">AI Governance: Mitigating Shadow AI with ISO/IEC 42001</h2>
+  <div class="gov-stack">
+    <div class="gov-compare reveal" style="--i:2">
+      <div class="card gov-box trad">
+        <div class="head">
+          <div class="mini"><svg class="ic"><use href="#i-server"/></svg></div>
+          <div>
+            <span class="tag" style="color:var(--muted)">Operational IT Governance</span>
+            <h3>COBIT 2019 · ITIL 4 · ISO 27001</h3>
+          </div>
+        </div>
+        <ul>
+          <li><div class="mini"><svg class="ic"><use href="#i-check"/></svg></div>Alignment of IT projects with business goals</li>
+          <li><div class="mini"><svg class="ic"><use href="#i-check"/></svg></div>Service level stability &amp; incident management</li>
+          <li><div class="mini"><svg class="ic"><use href="#i-check"/></svg></div>CIA triad: Confidentiality, Integrity, Availability</li>
+        </ul>
+      </div>
+
+      <div class="card gov-box ai">
+        <div class="head">
+          <div class="mini" style="background:#dbeafe;color:var(--blue)"><svg class="ic"><use href="#i-sparkle"/></svg></div>
+          <div>
+            <span class="tag" style="color:var(--blue)">Artificial Intelligence Management System</span>
+            <h3>ISO/IEC 42001:2023 (AIMS)</h3>
+          </div>
+        </div>
+        <ul>
+          <li><div class="mini" style="background:#dbeafe;color:var(--blue)"><svg class="ic"><use href="#i-check"/></svg></div>Lifecycle controls for probabilistic &amp; autonomous models</li>
+          <li><div class="mini" style="background:#dbeafe;color:var(--blue)"><svg class="ic"><use href="#i-check"/></svg></div>Training data lineage, traceability, and bias auditing</li>
+          <li><div class="mini" style="background:#dbeafe;color:var(--blue)"><svg class="ic"><use href="#i-check"/></svg></div>Compliance with legal mandates (e.g., EU AI Act)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gov-tri">
+      <div class="card gov-card reveal" style="--i:3">
+        <div class="mini warn"><svg class="ic"><use href="#i-alert"/></svg></div>
+        <div>
+          <h4>Shadow AI Risk</h4>
+          <p>Unregulated employee use of commercial LLMs leaks sensitive code and proprietary data.</p>
+        </div>
+      </div>
+      <div class="card gov-card reveal" style="--i:4">
+        <div class="mini" style="background:#e0f2fe;color:var(--cyan)"><svg class="ic"><use href="#i-shield"/></svg></div>
+        <div>
+          <h4>38 Annex A Controls</h4>
+          <p>Standardized operational controls turning ethical guidelines into certifiable enterprise practices.</p>
+        </div>
+      </div>
+      <div class="card gov-card reveal" style="--i:5">
+        <div class="mini" style="background:#f0fdfa;color:var(--teal)"><svg class="ic"><use href="#i-eye"/></svg></div>
+        <div>
+          <h4>Human-in-the-Loop</h4>
+          <p>Continuous oversight to prevent algorithmic hallucination, discrimination, and autonomous error.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>11 / 13</span></div>
+</section>
+
+<!-- 12. HUMAN & SOCIAL: CDR & GREEN IT -->
+<section class="slide">
+  <div class="kicker reveal" style="--i:0">4.4 · Human &amp; Social Perspective</div>
+  <h2 class="reveal" style="--i:1">Corporate Digital Responsibility (CDR) &amp; Sustainability</h2>
+  <div class="cdr-grid">
+    <div class="card cdr-col reveal" style="--i:2">
+      <div class="cdr-head">
+        <div class="chip"><svg class="ic"><use href="#i-users"/></svg></div>
+        <div>
+          <span class="tag" style="color:var(--blue)">Human Dimension</span>
+          <h3>Cognitive Workplace Health</h3>
+        </div>
+      </div>
+      <div class="cdr-stat-row">
+        <span class="cdr-stat">63%</span>
+        <span class="cdr-stat-label">of remote workers switch daily across 4+ communications tools</span>
+      </div>
+      <div class="cdr-points">
+        <div class="cdr-point">
+          <div class="mini warn"><svg class="ic"><use href="#i-alert"/></svg></div>
+          <div><b>Context Switching:</b> Causes severe attention fragmentation, mental fatigue, and drops in deep work efficiency.</div>
+        </div>
+        <div class="cdr-point">
+          <div class="mini"><svg class="ic"><use href="#i-flow"/></svg></div>
+          <div><b>Hierarchical Flattening:</b> AI absorbs middle-management analytical tasks, requiring restructured leadership paths.</div>
+        </div>
+        <div class="cdr-point">
+          <div class="mini" style="background:#eff6ff;color:var(--blue)"><svg class="ic"><use href="#i-sparkle"/></svg></div>
+          <div><b>Workforce Remedy:</b> Workplace platform rationalization + structured enterprise-wide AI literacy.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card cdr-col reveal" style="--i:3">
+      <div class="cdr-head">
+        <div class="chip teal"><svg class="ic"><use href="#i-leaf"/></svg></div>
+        <div>
+          <span class="tag" style="color:var(--teal)">Ecological Dimension</span>
+          <h3>Green IT &amp; Planetary Footprint</h3>
+        </div>
+      </div>
+      <div class="cdr-stat-row">
+        <span class="cdr-stat teal">Scope 3</span>
+        <span class="cdr-stat-label">GHG Protocol indirect value-chain emissions in digital systems</span>
+      </div>
+      <div class="cdr-points">
+        <div class="cdr-point">
+          <div class="mini warn"><svg class="ic"><use href="#i-bolt"/></svg></div>
+          <div><b>AI Compute Surges:</b> Massive electricity and cooling water demands driven by LLM training and cloud inferencing.</div>
+        </div>
+        <div class="cdr-point">
+          <div class="mini"><svg class="ic"><use href="#i-globe"/></svg></div>
+          <div><b>Digital Divide:</b> MSMEs represent 95%+ of firms but face critical capital and knowledge barriers to adopt AI.</div>
+        </div>
+        <div class="cdr-point">
+          <div class="mini" style="background:#f0fdfa;color:var(--teal)"><svg class="ic"><use href="#i-shield"/></svg></div>
+          <div><b>Green Strategy:</b> Renewable cloud hosting SLAs, circular hardware lifecycles, and Scope 3 carbon audits.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="banner cdr-banner reveal" style="--i:4">
+    The 7 CDR Principles: Purpose &amp; Trust · Fair Access · Social Wellbeing · Economic Impact · Impact Economy · Planet · Green IT
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>12 / 13</span></div>
+</section>
+
+<!-- 13. CONCLUSION -->
+<section class="slide end">
+  <div class="kicker reveal" style="--i:0">Conclusion</div>
+  <div class="endgrid">
+    <div>
+      <p class="quote reveal" style="--i:1">Technology evolves fast, but what transforms an organization is <span>how it is implemented</span>.</p>
+      <span class="thanks reveal" style="--i:5">Thank you · Questions?</span>
+    </div>
+    <div class="facts">
+      <div class="fact reveal" style="--i:2"><div class="chip"><svg class="ic"><use href="#i-target"/></svg></div>Strategy</div>
+      <div class="fact reveal" style="--i:3"><div class="chip teal"><svg class="ic"><use href="#i-users"/></svg></div>People</div>
+      <div class="fact reveal" style="--i:4"><div class="chip amber"><svg class="ic"><use href="#i-shield"/></svg></div>Governance</div>
+    </div>
+  </div>
+  <div class="foot"><span>Software Implementation · ICT Evolution &amp; Organizational Transformation</span><span>13 / 13</span></div>
+</section>
+</div>
+
+<div class="ui" aria-label="Navigation">
+  <button id="prev" title="Previous (←)">‹</button>
+  <span id="cnt">1 / 13</span>
+  <button id="next" title="Next (→)">›</button>
+  <button id="fs" title="Fullscreen (F)" style="font-size:15px">⛶</button>
+</div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var stage=document.getElementById('stage'),bar=document.getElementById('bar'),cnt=document.getElementById('cnt');
+  var cur=0;
+  function show(n){
+    cur=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,i){s.classList.toggle('active',i===cur)});
+    bar.style.width=((cur+1)/slides.length*100)+'%';
+    cnt.textContent=(cur+1)+' / '+slides.length;
+    try{history.replaceState(null,'','#'+(cur+1))}catch(e){}
+  }
+  function fit(){
+    var s=Math.min(window.innerWidth/1280,window.innerHeight/720);
+    stage.style.transform='translate(-50%,-50%) scale('+s+')';
+  }
+  function fs(){
+    if(document.fullscreenElement){document.exitFullscreen()}
+    else if(document.documentElement.requestFullscreen){document.documentElement.requestFullscreen()}
+  }
+  document.getElementById('prev').onclick=function(){show(cur-1)};
+  document.getElementById('next').onclick=function(){show(cur+1)};
+  document.getElementById('fs').onclick=fs;
+  document.addEventListener('keydown',function(e){
+    var k=e.key;
+    if(k==='ArrowRight'||k==='PageDown'||k===' '||k==='Enter'){e.preventDefault();show(cur+1)}
+    else if(k==='ArrowLeft'||k==='PageUp'||k==='Backspace'){e.preventDefault();show(cur-1)}
+    else if(k==='Home'){show(0)} else if(k==='End'){show(slides.length-1)}
+    else if(k==='f'||k==='F'){fs()}
+  });
+  window.addEventListener('resize',fit);
+  fit();
+  var h=parseInt((location.hash||'').slice(1),10);
+  show(isNaN(h)?0:h-1);
+})();
+</script>
+</body>
+</html>
